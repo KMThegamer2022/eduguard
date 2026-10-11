@@ -1,0 +1,6 @@
+#!/bin/bash
+# Archiver wrapper for cross C builds (cc crate). Must understand ELF members:
+# the host macOS `ar`/`ranlib` rejects them ("not a mach-o file") and writes an
+# empty archive, which surfaces later as undefined sqlite3_* link errors.
+# `zig ar` is LLVM's archiver and handles any target.
+exec zig ar "$@"

@@ -1,0 +1,17 @@
+#!/bin/sh
+# EduGuard agent — enabled at boot; starts for real after enrollment.
+set -e
+case "$1" in
+  configure)
+    mkdir -p /etc/eduguard /var/lib/eduguard
+    if command -v systemctl >/dev/null 2>&1; then
+      systemctl daemon-reload >/dev/null 2>&1 || true
+      systemctl enable eduguard-agent >/dev/null 2>&1 || true
+    fi
+    echo "EduGuard agent installed. Next steps:"
+    echo "  sudo eduguard-agent enroll --server http://SERVER:8443 --token eg-..."
+    echo "  sudo systemctl start eduguard-agent"
+    echo "X11 capture/overlay: set DISPLAY/XAUTHORITY in /etc/eduguard/agent.env"
+    ;;
+esac
+exit 0

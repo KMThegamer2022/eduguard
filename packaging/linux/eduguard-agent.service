@@ -1,0 +1,18 @@
+[Unit]
+Description=EduGuard device agent (monitoring + safeguarding)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/eduguard-agent run
+# Retries until the device is enrolled (run: sudo eduguard-agent enroll ...).
+Restart=always
+RestartSec=10
+# Optional session environment for X11 screen capture / overlay, e.g.
+#   echo 'DISPLAY=:0' > /etc/eduguard/agent.env
+#   echo 'XAUTHORITY=/home/<user>/.Xauthority' >> /etc/eduguard/agent.env
+EnvironmentFile=-/etc/eduguard/agent.env
+
+[Install]
+WantedBy=multi-user.target

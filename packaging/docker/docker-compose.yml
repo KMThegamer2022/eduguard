@@ -1,0 +1,17 @@
+# Plain Docker deployment of the EduGuard server (any Linux host with
+# Docker — for Home Assistant OS use the add-on in ../homeassistant/).
+# The Dockerfile is shared with the add-on; without /data/options.json the
+# entrypoint falls back to defaults and the server generates a first-run
+# admin password + enrollment token (visible in `docker compose logs`).
+services:
+  eduguard-server:
+    build: ../homeassistant/eduguard-server
+    container_name: eduguard-server
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+    volumes:
+      - eduguard-data:/data
+
+volumes:
+  eduguard-data:

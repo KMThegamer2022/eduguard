@@ -1,0 +1,23 @@
+name: EduGuard Server
+version: "0.1.0"
+slug: eduguard_server
+description: >-
+  EduGuard classroom safeguarding server — browser console, device gateway,
+  keyword alerts and audit trail. Enroll Windows/macOS/Linux agents against it.
+url: https://github.com/eduguard/eduguard
+arch:
+  - aarch64
+  - amd64
+startup: application
+boot: auto
+init: false
+ports:
+  8443/tcp: 8443
+ports_description:
+  8443/tcp: EduGuard web console
+options:
+  admin_password: ""
+  school_name: EduGuard School
+schema:
+  admin_password: password?
+  school_name: string

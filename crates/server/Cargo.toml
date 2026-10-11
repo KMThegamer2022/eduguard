@@ -1,0 +1,31 @@
+[package]
+name = "eduguard-server"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "EduGuard management server: API, device broker, policy engine, web console"
+
+[[bin]]
+name = "eduguard-server"
+path = "src/main.rs"
+
+[dependencies]
+protocol = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+tokio = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+axum = { version = "0.8", features = ["ws", "multipart"] }
+axum-server = { version = "0.7", features = ["tls-rustls"] }
+rusqlite = { version = "0.40", features = ["bundled"] }
+rand = "0.8"
+sha2 = "0.10"
+hex = "0.4"
+base64 = "0.22"
+toml = "0.8"
+clap = { version = "4", features = ["derive"] }
+futures-util = "0.3"

@@ -1,0 +1,19 @@
+#!/bin/sh
+# EduGuard server — runs at boot as root; first-run credentials land in the
+# log (journalctl) and in /etc/eduguard/server.toml.
+set -e
+case "$1" in
+  configure)
+    mkdir -p /etc/eduguard /var/lib/eduguard
+    if command -v systemctl >/dev/null 2>&1; then
+      systemctl daemon-reload >/dev/null 2>&1 || true
+      systemctl enable eduguard-server >/dev/null 2>&1 || true
+      systemctl restart eduguard-server >/dev/null 2>&1 || \
+        systemctl start eduguard-server >/dev/null 2>&1 || true
+    fi
+    echo "EduGuard server installed. Console: http://<server>:8443/"
+    echo "First-run admin password + enrollment token:"
+    echo "  journalctl -u eduguard-server | grep 'first run'"
+    ;;
+esac
+exit 0

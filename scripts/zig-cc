@@ -1,0 +1,41 @@
+#!/bin/bash
+# Cross C compiler wrapper for cargo-zigbuild (cc crate: rusqlite's bundled
+# SQLite, aws-lc-sys, ...). cc-rs passes clang-style triples such as
+# `--target=x86_64-unknown-linux-gnu`; zig wants `x86_64-linux-gnu.2.17`
+# (no `-unknown-`, explicit glibc baseline matching our zigbuild target).
+set -u
+
+GLIBC="${ZIG_GLIBC:-2.17}"
+
+norm() {
+  local t="$1"
+  t="${t/-unknown-/-}"
+  if [[ "$t" == *-linux-* && "$t" != *.* ]]; then
+    t="${t}.${GLIBC}"
+  fi
+  printf '%s' "$t"
+}
+
+argv=("$@")
+args=()
+i=0
+n=${#argv[@]}
+while (( i < n )); do
+  a="${argv[$i]}"
+  case "$a" in
+    --target=*)
+      args+=("--target=$(norm "${a#--target=}")")
+      ;;
+    -target)
+      (( i + 1 < n )) || { args+=("$a"); break; }
+      args+=("-target" "$(norm "${argv[$((i + 1))]}")")
+      (( i++ ))
+      ;;
+    *)
+      args+=("$a")
+      ;;
+  esac
+  (( i++ ))
+done
+
+exec zig cc "${args[@]}"

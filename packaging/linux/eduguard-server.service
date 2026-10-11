@@ -1,0 +1,23 @@
+[Unit]
+Description=EduGuard management server (console + device gateway)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/eduguard-server serve
+Restart=on-failure
+RestartSec=3
+StateDirectory=eduguard
+# First run writes /etc/eduguard/server.toml and prints the admin password +
+# enrollment token:   journalctl -u eduguard-server | grep 'first run'
+# (also stored in /etc/eduguard/server.toml; rotate with
+#  `eduguard-server reset-admin-password`).
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=full
+ReadWritePaths=/etc/eduguard /var/lib/eduguard
+
+[Install]
+WantedBy=multi-user.target

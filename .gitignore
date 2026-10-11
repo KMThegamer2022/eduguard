@@ -1,0 +1,10 @@
+# Build outputs
+/target
+/dist
+
+# Staged add-on binaries — built by scripts/package-all.sh and shipped via the
+# add-on repository (https://github.com/KMThegamer2022/eduguard-addons)
+/packaging/homeassistant/eduguard-server/bin/
+
+# OS junk
+.DS_Store

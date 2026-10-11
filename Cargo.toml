@@ -1,0 +1,39 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/protocol",
+    "crates/server",
+    "crates/agent",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+repository = "https://github.com/eduguard/eduguard"
+
+[workspace.dependencies]
+protocol = { path = "crates/protocol" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+thiserror = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tokio = { version = "1", features = ["full"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
+
+# Vendored xcap with the Wayland/PipeWire capture paths removed (see
+# vendor/xcap/EDUGUARD.md): those pull in wayland/gbm/drm/pipewire native
+# libraries that break cross-compilation and add runtime deps we don't need —
+# Linux capture is X11/xcb only in this build.
+[patch.crates-io]
+xcap = { path = "vendor/xcap" }
